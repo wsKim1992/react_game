@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+</head>
+<body>
+    <div id ="root">
+    </div>
+</body>
+<script type="text/babel">
+    const GuGuDan= ()=>{
+        const [first,setFirst]=React.useState(Math.ceil(Math.random()*9));
+        const [seconds,setSeconds]=React.useState(Math.ceil(Math.random()*9));
+        const [value,setValue]=React.useState('');
+        const [result,setResult]=React.useState('');
+        
+        const onChangeInput = (e)=>{
+            setValue(e.target.value)
+        }
+        //Dom에 접근하기 위한 React 맴버 매서드..
+        let inputRef = React.useRef(null); 
+
+        const onSubmitForm=(e)=>{
+            e.preventDefault();
+            if(parseInt(value)===first*seconds){
+                setFirst(Math.ceil(Math.random()*9));
+                setSeconds(Math.ceil(Math.random()*9));
+                setResult((prevResult)=>{
+                    //파라미터 prevResult는 이전state값임.
+                    console.log("이전결과 : "+prevResult);
+                    return "정답 : "+value;
+                });
+                setValue("");
+            }else{
+                setResult("땡")
+                setValue("")
+            }
+            //Dom에 접근시 current 로 접근해야함..
+            inputRef.current.focus();
+            console.log(inputRef);
+        }
+
+        return (
+            <React.Fragment>
+                <div>{first} 곱하기 {seconds}는?</div>
+                <form onSubmit={onSubmitForm}>
+                    <input type="number" ref={inputRef} onChange={onChangeInput} value={value}/>
+                    <button>입력</button>
+                </form>
+                <div id="result">{result}</div>
+            </React.Fragment>
+        );
+    }
+</script>
+<script type="text/babel">
+    ReactDOM.render(<GuGuDan />,document.querySelector("#root"));
+</script>
+</html>
